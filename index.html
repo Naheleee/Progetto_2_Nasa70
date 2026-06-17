@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NASA 70°</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div id="about-page">
+    <div class="about-container">
+      <iframe src="logo_nasa70/logo.html" class="about-logo" scrolling="no"></iframe>
+      <div style="display: flex; flex-direction: column; gap: 20px; position: relative; flex: 1; width: 800px;">
+        <p class="about-description"
+          data-original-content="Welcome to our digital archive, created to celebrate <strong>NASA's 70th anniversary</strong>.<br><br>Since 1958, NASA has led the way in exploring space and expanding our knowledge of the universe. This space is not just a historical record; it is a collection of interactive projects dedicated to these seven decades of discovery.">
+        </p>
+        <button class="about-close-btn" onclick="closeAboutPage()">Explore</button>
+      </div>
+    </div>
+  </div>
+  <main>
+    <div id="top-half">
+      <div id="top-left">
+        <div id="project-detail">
+          <div id="detail-image-container"></div>
+          <div id="detail-info"></div>
+        </div>
+        <div class="list-header">
+          <span class="col-title" onclick="sortBy('titolo')">Title <i id="arrow-titolo" class="sort-arrow">></i></span>
+          <span class="col-author" onclick="sortBy('autore')">Author <i id="arrow-autore"
+              class="sort-arrow">></i></span>
+          <span class="col-date" onclick="sortBy('anno')">Date <i id="arrow-anno" class="sort-arrow">></i></span>
+        </div>
+      </div>
+      <div id="top-right">
+        <div style="display: flex; align-items: center; justify-content: flex-end; width: 100%; padding-right: 15px;">
+          <a href="https://www.nasa.gov" target="_blank">
+            <img src="assets/Nasa_logo.png" alt="Logo NASA" style="width: 85px; height: auto; margin: 20px;">
+          </a>
+          <a href="#" onclick="openAboutPage(); return false;" class="logo-iframe-link">
+            <iframe src="logo_nasa70/logo.html" class="logo-iframe" scrolling="no"></iframe>
+          </a>
+        </div>
+        <div id="labels-x-container">
+          <div id="labels-x" class="axis-x-labels"></div>
+        </div>
+      </div>
+    </div>
+    <div id="bottom-half">
+      <div id="scroll-wrapper">
+        <div id="left-bottom">
+          <div id="list-wrapper">
+            <div id="project-list"></div>
+          </div>
+        </div>
+        <div id="right-bottom">
+          <div id="grid-container">
+            <div id="radar" class="radar-grid">
+              <div id="radar-canvas">
+                <svg id="highlight-column"></svg>
+                <svg id="radar-connections"></svg>
+                <div id="labels-y" class="axis-y-labels"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="javascript/script.js"></script>
+</body>
+
+</html>

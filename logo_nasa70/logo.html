@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: transparent;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="logoCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('logoCanvas');
+        const ctx = canvas.getContext('2d');
+        const cols = 20;
+        const rows = 10;
+        const grid = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1],
+            [1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1],
+            [1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+        ];
+
+        let visible = grid.map(row => row.map(cell => cell === 1));
+        let isAnimating = false;
+
+        function resize() {
+            canvas.width = 1200;
+            canvas.height = 700;
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cellWidth = canvas.width / cols;
+            const cellHeight = canvas.height / rows;
+            const radius = Math.min(cellWidth, cellHeight) / 2.5;
+
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    if (grid[y][x] === 1 && visible[y][x]) {
+                        ctx.beginPath();
+                        ctx.arc(x * cellWidth + cellWidth / 2, y * cellHeight + cellHeight / 2, radius, 0, Math.PI * 2);
+                        ctx.fillStyle = "white";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        async function runSpecialAnimation() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            let activeCells = [];
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    if (grid[y][x] === 1) activeCells.push({
+                        y,
+                        x
+                    });
+                }
+            }
+            const half = Math.floor(activeCells.length / 2);
+
+            const setVisible = (index, state) => {
+                const {
+                    y,
+                    x
+                } = activeCells[index];
+                visible[y][x] = state;
+                draw();
+            };
+
+            const totalSteps = activeCells.length + half;
+
+            for (let i = 0; i < totalSteps; i++) {
+                if (i < activeCells.length) {
+                    setVisible(i, false);
+                }
+
+                if (i >= half) {
+                    setVisible(i - half, true);
+                }
+
+                await new Promise(r => setTimeout(r, 10));
+            }
+
+            isAnimating = false;
+        }
+
+        setInterval(() => {
+            if (!isAnimating) runSpecialAnimation();
+        }, 10000);
+
+        window.addEventListener('resize', resize);
+        resize();
+    </script>
+</body>
+
+</html>
